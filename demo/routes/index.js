@@ -130,7 +130,7 @@ router.get('/detail/:id', async (req, res) => {
 router.post('/search', async (req, res) => {
   let keyword = req.body.keyword;
   let toys = await ToyModel.find({ name: new RegExp(keyword, "i") });
-  res.render('nammautoy/list', { toyList : toys });
+  res.render('nammautoy/list', { toys : toys });
 })
 
 module.exports = router;

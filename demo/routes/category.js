@@ -40,5 +40,31 @@ router.get('/list', async (req, res) => {
    res.render("category/list", { categories: categories });
 })
 
+router.get('/edit/:id', async (req, res) => {
+   try {
+      const category = await CategoryModel.findById(req.params.id); // Tìm danh mục cần chỉnh sửa bằng ID
+      if (!category) {
+         return res.status(404).send("Category not found");
+      }
+      res.render('category/edit', { category }); // Truyền thông tin danh mục vào trang chỉnh sửa
+   } catch (error) {
+      console.error('Error fetching category for edit:', error);
+      res.status(500).send("Internal Server Error");
+   }
+});
+
+// Route để xử lý yêu cầu cập nhật danh mục
+router.post('/edit/:id', async (req, res) => {
+   try {
+      const { name } = req.body;
+      await CategoryModel.findByIdAndUpdate(req.params.id, { name }); // Cập nhật tên của danh mục
+      console.log('Category updated successfully!');
+      res.redirect("/category"); // Chuyển hướng sau khi cập nhật thành công
+   } catch (error) {
+      console.error('Error updating category:', error);
+      res.status(500).send("Internal Server Error");
+   }
+});
+
 
 module.exports = router;
